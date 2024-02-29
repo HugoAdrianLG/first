@@ -1,0 +1,37 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Articulos</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col *ngFor="let item of resp">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>{{ item.imagen }}</ion-card-title>
+          </ion-card-header>
+
+          <ion-card-content>
+            <p>ID: {{item.id_articulo || 'No disponible'}}</p>
+            <p>Articulo: {{ item.articulo }}</p>
+            <p>Descripción: {{ item.descripcion}}</p>
+            <ion-button (click)="item.id_articulo !== undefined && deleteItem(item.id_articulo)" shape="round-10" fill="clear">
+              <ion-icon slot="icon-only"  name="trash-outline"></ion-icon>
+              <p *ngIf="!item.id_articulo">ID de artículo no disponible</p>
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

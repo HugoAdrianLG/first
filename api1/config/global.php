@@ -4,13 +4,13 @@
 define("DB_ENCODE","utf8");
 
 //Definimos una constante como nombre del proyecto
-define("PRO_NOMBRE","mv");
+define("PRO_NOMBRE","mh");
  
 //datos de producci贸n, descomentar para pasar
 define("DB_HOST","localhost");
 
 //Nombre de la base de datos pr
-define("DB_NAME", "movil");
+define("DB_NAME", "mahoraga");
 
 //Usuario de la base de datos pr
 define("DB_USERNAME", "root");

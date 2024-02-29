@@ -1,11 +1,28 @@
 <?php
-require "config/Conexion.php";
+// Permitir solicitudes desde cualquier origen
+header("Access-Control-Allow-Origin: *");
 
-  //print_r($_SERVER['REQUEST_METHOD']);
-  switch($_SERVER['REQUEST_METHOD']) {
+// Permitir los métodos de solicitud GET, POST, PUT, DELETE y OPTIONS
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+
+// Permitir los encabezados especificados
+header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
+
+// Permitir cookies a través de solicitudes
+header("Access-Control-Allow-Credentials: true");
+
+// Si la solicitud es una opción, finaliza aquí y no realiza ninguna otra acción
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    exit();
+}
+require "config/Conexion.php";
+$datos = json_decode(file_get_contents('php://input'), true);
+
+// users //
+switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
       // Consulta SQL para seleccionar datos de la tabla
-$sql = "SELECT nombre, apellidos, telefono, correo FROM usuarios";
+$sql = "SELECT id_articulo, articulo, imagen, descripcion FROM articulos";
 
 $query = $conexion->query($sql);
 
@@ -25,29 +42,30 @@ $conexion->close();
       break;
 
 
-    case 'POST':
-      if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        // Recibir los datos del formulario HTML
-        $nombre = $_POST['nombre'];
-        $apellidos = $_POST['apellidos'];
-        $telefono = $_POST['telefono'];
-        $correo = $_POST['correo'];
-     
+      case 'POST':
+        // Decodificar el JSON en un array asociativo
+        $datos = json_decode(file_get_contents('php://input'), true);
     
-        // Insertar los datos en la tabla
-        $sql = "INSERT INTO usuarios (nombre, apellidos, telefono, correo ) VALUES ('$nombre', '$apellidos','$telefono', '$correo')"; // Reemplaza con el nombre de tu tabla
+        // Verificar si los datos están presentes y son válidos
+        if(isset($datos['articulo']) && isset($datos['imagen']) && isset($datos['descripcion'])) {
+            $articulo = $datos['articulo'];
+            $imagen = $datos['imagen'];
+            $descripcion = $datos['descripcion'];
     
-        if ($conexion->query($sql) === TRUE) {
-            echo "Datos insertados con éxito.";
+            // Insertar los datos en la tabla
+            $sql = "INSERT INTO articulos (articulo, imagen, descripcion) VALUES ('$articulo', '$imagen', '$descripcion')";
+    
+            if ($conexion->query($sql) === TRUE) {
+                echo "Datos insertados con éxito.";
+            } else {
+                echo "Error al insertar datos: " . $conexion->error;
+            }
         } else {
-            echo "Error al insertar datos: " . $conexion->error;
+            echo "Datos incorrectos o faltantes en la solicitud.";
         }
-    } else {
-        echo "Esta API solo admite solicitudes POST.";
-    }
     
-    $conexion->close();
-      break;
+        $conexion->close();
+        break;    
 
       case 'PATCH':
         if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
@@ -123,39 +141,34 @@ $conexion->close();
         }
       break;
   
-      
-    case 'DELETE':
-        // Obtener el contenido del cuerpo de la solicitud
-        $json = file_get_contents('php://input');
-        
-        // Decodificar el JSON en un array asociativo
-        $data = json_decode($json, true);
-        
-        // Verificar si la solicitud es DELETE
-        if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-            // Verificar si se proporciona el parámetro id_usuario en el JSON
-            if (isset($data['id'])) {
-                // Procesar solicitud DELETE
-                $id= $data['id'];
-                $sql = "DELETE FROM usuarios WHERE id_usuario = $id";
-        
-                // Realizar la consulta DELETE
-                if ($conexion->query($sql) === TRUE) {
-                    echo "Registro eliminado con éxito.";
-                } else {
-                    echo "Error al eliminar registro: " . $conexion->error;
-                }
-            } else {
-                echo "El parámetro id_usuario no se proporcionó en el JSON.";
-            }
-        } else {
-            echo "Método de solicitud no válido.";
+      case 'DELETE':
+        // Obtener el ID de usuario del arreglo $datos
+        $id_articulo = isset($_GET['id']) ? $_GET['id'] : null;
+    
+        // Verificar si se proporcionó el ID de usuario
+        if ($id_articulo === null) {
+            break; // Sale del switch si el ID de usuario no está presente
         }
-        
-        // Cerrar la conexión a la base de datos
-        $conexion->close();
-      break;
-
+    
+        // Preparar la consulta de eliminación
+        $stmt = $conexion->prepare("DELETE FROM articulos WHERE id_articulo = ?");
+    
+        // Verificar si la preparación de la consulta fue exitosa
+        if ($stmt === false) {
+            $conexion->error;
+            break;
+        }
+    
+        // Vincular el parámetro ID de usuario
+        $stmt->bind_param("i", $id_articulo);
+    
+        // Ejecutar la consulta de eliminación
+        if ($stmt->execute()) {
+            
+        } else {
+       
+        }
+        break;
 
      default:
        echo 'undefined request type!';
