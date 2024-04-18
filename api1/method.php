@@ -18,7 +18,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 require "config/Conexion.php";
 $datos = json_decode(file_get_contents('php://input'), true);
 
-// users //
 switch ($_SERVER['REQUEST_METHOD']) {
     case 'GET':
       // Consulta SQL para seleccionar datos de la tabla
@@ -68,44 +67,38 @@ $conexion->close();
         break;    
 
       case 'PATCH':
-        if ($_SERVER['REQUEST_METHOD'] === 'PATCH') {
-          parse_str(file_get_contents("php://input"), $datos);
-      
-          $id_usuario = $datos['id_usuario'];
-          $nombre = $datos['nombre'];
-          $apellidos = $datos['apellidos'];
-          $correo = $datos['correo'];
-          $telefono = $datos['telefono'];
-      
-          if ($_SERVER['REQUEST_METHOD'] === 'PATCH') { // Método PATCH
-            $actualizaciones = array();
-              if (!empty($nombre)) {
-                    $actualizaciones[] = "nombre = '$nombre'";
-              }
-              if (!empty($apellidos)) {
-                  $actualizaciones[] = "apellidos = '$apellidos'";
-              }
-              if (!empty($correo)) {
-                  $actualizaciones[] = "telefono = '$telefono'";
-              }
-              if (!empty($telefono)) {
-                  $actualizaciones[] = "correo = '$correo'";
-              }
-              
-              $actualizaciones_str = implode(', ', $actualizaciones);
+        $id_articulo= $datos['id_articulo'];
+        $nombre = $datos['articulo']; // Cambiar al campo que corresponda
+        $imagen = $datos['imagen']; // Cambiar al campo que corresponda
+        $descripcion = $datos['descripcion']; // Cambiar al campo que corresponda
 
-              $sql = "UPDATE usuarios SET $actualizaciones_str WHERE id_usuario = $id_usuario";
-          }
+        $actualizaciones = array();
+        if (!empty($nombre)) {
+        $actualizaciones[] = "articulo = '$nombre'";
+        }
+        if (!empty($imagen)) {
+        $actualizaciones[] = "imagen = '$imagen'";
+        }
+        if (!empty($descripcion)) {
+        $actualizaciones[] = "descripcion = '$descripcion'";
+        }
+
+        $actualizaciones_str = implode(', ', $actualizaciones);
+
+        $sql = "UPDATE articulos SET $actualizaciones_str WHERE id_articulo = $id_articulo";
+
+        if ($conexion->query($sql) === TRUE) {
+        echo "Registro actualizado con éxito.";
+        } else {
+        echo "Error al actualizar registro: " . $conexion->error;
+        }
+        break;
       
           if ($conexion->query($sql) === TRUE) {
               echo "Registro actualizado con éxito.";
           } else {
               echo "Error al actualizar registro: " . $conexion->error;
           }
-      } else {
-          echo "Método de solicitud no válido.";
-      }
-      
       $conexion->close();
        break;
 
@@ -114,32 +107,31 @@ $conexion->close();
         var_dump($input);
 
         // Asegúrate de que los datos necesarios estén presentes
-        if (isset($input['nombre']) && isset($input['apellidos']) && isset($input['telefono']) && isset($input['correo'])) {
-            $nombre = $input['nombre'];
-            $apellidos = $input['apellidos'];
-            $telefono = $input['telefono'];
-            $correo = $input['correo'];
-
-            $sql = "INSERT INTO usuarios (nombre, apellidos, telefono, correo) VALUES (?, ?, ?, ?)";
+        if (isset($input['articulo']) && isset($input['imagen']) && isset($input['descripcion'])) {
+            $articulo = $input['articulo'];
+            $imagen = $input['imagen'];
+            $descripcion = $input['descripcion'];
+        
+            $sql = "INSERT INTO articulos (articulo, imagen, descripcion) VALUES (?, ?, ?)";
             $stmt = $conexion->prepare($sql);
-
+        
             // Enlaza los parámetros y sus tipos
-            $stmt->bind_param("sssi", $nombre, $apellidos, $telefono, $correo);
-
+            $stmt->bind_param("ssi", $articulo, $imagen, $descripcion);
+        
             if ($stmt->execute()) {
-                $response = array("message" => "Registro insertado con éxito.");
-                echo json_encode($response);
+              $response = array("message" => "Artículo insertado con éxito.");
+              echo json_encode($response);
             } else {
-                $response = array("error" => "Error al insertar registro: " . $stmt->error);
-                echo json_encode($response);
+              $response = array("error" => "Error al insertar artículo: " . $stmt->error);
+              echo json_encode($response);
             }
-
+        
             $stmt->close();
-        } else {
+          } else {
             $response = array("error" => "Faltan datos obligatorios en la solicitud.");
             echo json_encode($response);
-        }
-      break;
+          }
+          break;
   
       case 'DELETE':
         // Obtener el ID de usuario del arreglo $datos

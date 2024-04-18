@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      Actualizar Articulos
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-label position="stacked">ID del articulo</ion-label>
+    <ion-input type="text" [(ngModel)]="id_articulo"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Articulo</ion-label>
+    <ion-input type="text" [(ngModel)]="articulo"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">imagen</ion-label>
+    <ion-input type="number" [(ngModel)]="imagen"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">descripcion</ion-label>
+    <ion-input type="number" [(ngModel)]="descripcion"></ion-input>
+  </ion-item>
+
+  <ion-button expand="block" (click)="enviarDatos()">Actualizar Producto</ion-button>
+</ion-content>
+

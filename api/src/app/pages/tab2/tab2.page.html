@@ -1,29 +1,60 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
     <ion-title>
-      Tab 2
+      Perfil de usuario
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Ingresar Articulo</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content *ngIf="isAuthenticated; else notAuthenticatedContent">
+  <div class="centered-container">
+    <ion-card>
+      <ion-card-content>
+        <ion-avatar slot="start">
+          <ion-icon name="person" class="icon-center"></ion-icon>
+        </ion-avatar>
+
+        <ion-item>
+          <ion-label>Nombre</ion-label>
+          <ion-input [(ngModel)]="userData.nombre" disabled></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label>Correo electrónico</ion-label>
+          <ion-input [(ngModel)]="userData.email" disabled></ion-input>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
+
+<ng-template #notAuthenticatedContent>
+  <ion-card>
+    <ion-card-content>
+      <p>Debes iniciar sesión para ver esta página.</p>
+    </ion-card-content>
+  </ion-card>
+</ng-template>
+
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-title>Perfil de Usuario</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-label>Nombre de Usuario</ion-label>
+    <ion-input type="text" [(ngModel)]="username"></ion-input>
+  </ion-item>
 
   <ion-item>
-    <ion-label position="floating">Articulo</ion-label>
-    <ion-input aria-label="articulo" type="text" [(ngModel)]="articulo"></ion-input>
+    <ion-label>Foto de perfil</ion-label>
+    <input type="file" (change)="onFileChanged($event)" accept="image/*">
   </ion-item>
-  <ion-item>
-    <ion-label position="floating">Imagen</ion-label>
-    <ion-input aria-label="imagen" type="text" [(ngModel)]="imagen"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="floating">Descripción</ion-label>
-    <ion-input aria-label="descripcion" type="text" [(ngModel)]="descripcion"></ion-input>
-  </ion-item>
-  <ion-button expand="block" (click)="enviarDatos()">Enviar</ion-button>
-</ion-content>
+
+  <ion-button expand="full" color="primary" (click)="updateProfile()">Guardar Cambios</ion-button>
+
+  Mostrar la foto de perfil si está disponible -->
+  <!-- <ion-img [src]="userPhotoURL" *ngIf="userPhotoURL"></ion-img>
+</ion-content> -->

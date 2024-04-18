@@ -7,7 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NewsService } from 'src/app/services/api.service';
 import { FormsModule } from '@angular/forms';
 import { ExploreContainerComponentModule } from 'src/app/explore-container/explore-container.module';
-import { ModalLoginComponent } from '../modal-login/modal-login.component';
+
 
 @NgModule({
   imports: [
@@ -19,6 +19,6 @@ import { ModalLoginComponent } from '../modal-login/modal-login.component';
     Tab1PageRoutingModule
   ],
   providers:[NewsService],
-  declarations: [Tab1Page, ModalLoginComponent],
+  declarations: [Tab1Page],
 })
 export class Tab1PageModule {}

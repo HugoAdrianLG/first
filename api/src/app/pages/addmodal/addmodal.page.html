@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      Agregar Articulos
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+    <ion-label position="stacked">Articulo</ion-label>
+    <ion-input type="text" [(ngModel)]="articulo"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">imagen</ion-label>
+    <ion-input type="number" [(ngModel)]="imagen"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">descripcion</ion-label>
+    <ion-input type="number" [(ngModel)]="descripcion"></ion-input>
+  </ion-item>
+
+  <ion-button expand="block" (click)="enviarDatos()">Agregar Producto</ion-button>
+</ion-content>
+

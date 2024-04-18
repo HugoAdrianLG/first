@@ -7,4 +7,5 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   constructor() {}
+  correoAdmin = 'lechuga.hugo.1b.m@gmail.com'
 }

@@ -27,7 +27,15 @@ export class ApiService {
     const url = `${this.apiUrl}?id=${id_articulo}`;
     return this.http.delete<any>(url);
   }
+
+  patchDatos(datos: any): Observable<any> {
+    // Reemplaza la URL con la ruta correcta para PATCH
+    const url = `${this.apiUrl}?id=${datos.id_articulo}`;
+    return this.http.patch<any>(url, datos);
+  }
 }
+
+
 
 @Injectable({
   providedIn: 'root'

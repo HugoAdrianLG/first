@@ -1,13 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from 'src/app/services/api.service';
 import { TopLevel } from '../../interfaces/index';
-import { ModalController } from '@ionic/angular';
-import { NavController } from '@ionic/angular';
-
-import { AppComponent } from 'src/app/app.component';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-
-
 
 @Component({
   selector: 'app-tab3',
@@ -17,25 +10,8 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 })
 export class Tab3Page implements OnInit {
   public resp: TopLevel[] = [];
-  correoSesion: String | null = null;
 
-  constructor(private newService: ApiService, public modalController: ModalController, public appComponent: AppComponent, private afAuth : AngularFireAuth,  private navCtrl : NavController,) {
-
-    this.afAuth.authState.subscribe(user => {
-      if (user) {
-        this.correoSesion = user.email;
-        // Comparar el correo de sesión con el correo estático del administrador
-        if (this.correoSesion === this.appComponent.correoAdmin) {
-          console.log('El usuario es el administrador.');
-          // Mostrar opciones para el administrador
-        } else {
-          console.log('El usuario NO es el administrador.');
-          // Mostrar opciones para usuarios normales
-        }
-      }
-    });
-
-  }
+  constructor(private newService: ApiService) {}
 
   ngOnInit() {
     this.newService.getTopHeadlines().subscribe(resp => {
@@ -63,12 +39,5 @@ export class Tab3Page implements OnInit {
     );
   }
 
-  openAddModal() {
-    this.navCtrl.navigateForward('/addmodal');
-  }
-
-  openModal(){
-    this.navCtrl.navigateForward('/updatemodal')
-  }
 
 }
